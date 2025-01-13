@@ -52,6 +52,8 @@ chmod +x setup.sh
 pip install -r requirements.txt
 ```
 
+5. Add human_typer Folder to venv/.../lib as a module
+
 ## Running the Demo
 
 ### Set up your environment and Anthropic API key
