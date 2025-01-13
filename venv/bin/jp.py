@@ -1,4 +1,4 @@
-#!/Users/tuhin/Desktop/Bachelorarbeit/mac-pc-use/mac_computer_use/venv/bin/python
+#!/Users/tuhin/Desktop/Bachelorarbeit/mac_computer_use_bachelorarbeit/venv/bin/python3.12
 
 import sys
 import json

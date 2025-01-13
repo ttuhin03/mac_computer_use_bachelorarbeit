@@ -168,17 +168,19 @@ class ComputerTool(BaseAnthropicTool):
                     else:
                         # Handle single keys#
                         if text in key_map:
+                            #raise Exception("Key not supported")
                             mapped_key = key_map.get(text, text)
                             await asyncio.get_event_loop().run_in_executor(
                             None, keyboard.press_and_release, mapped_key
                             )
                             return ToolResult(output=f"Pressed key: {text}", error=None, base64_image=None)
+                    
 
 
                         random_number = random.randint(150, 230)
                         print("CPM: ", random_number)
-                        My_Typer = Human_typer(keyboard_layout = "qwertz", average_wpm = random_number)
-                        My_Typer.keyboard_type(mapped_key)
+                        My_Typer = Human_typer(keyboard_layout = "qwerty", average_wpm = 190)
+                        My_Typer.keyboard_type(text)
                         #await asyncio.get_event_loop().run_in_executor(
                         #    None, keyboard.press_and_release, mapped_key
                         #)
@@ -189,9 +191,13 @@ class ComputerTool(BaseAnthropicTool):
                     return ToolResult(output=None, error=str(e), base64_image=None)
             elif action == "type":
                 results: list[ToolResult] = []
-                for chunk in chunks(text, TYPING_GROUP_SIZE):
-                    cmd = f"cliclick w:{TYPING_DELAY_MS} t:{shlex.quote(chunk)}"
-                    results.append(await self.shell(cmd, take_screenshot=False))
+                random_number = random.randint(150, 230)
+                print("CPM: ", random_number)
+                My_Typer = Human_typer(keyboard_layout = "qwerty", average_wpm = 190)
+                My_Typer.keyboard_type(text)
+                #for chunk in chunks(text, TYPING_GROUP_SIZE):
+                #    cmd = f"cliclick w:{TYPING_DELAY_MS} t:{shlex.quote(chunk)}"
+                #    results.append(await self.shell(cmd, take_screenshot=False))
                 screenshot_base64 = (await self.screenshot()).base64_image
                 return ToolResult(
                     output="".join(result.output or "" for result in results),
