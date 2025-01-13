@@ -9,6 +9,11 @@ from pathlib import Path
 from typing import Literal, TypedDict
 from uuid import uuid4
 
+import random
+
+from humancursor import SystemCursor
+from human_typer import Human_typer
+
 from anthropic.types.beta import BetaToolComputerUse20241022Param
 
 from .base import BaseAnthropicTool, ToolError, ToolResult
@@ -119,6 +124,9 @@ class ComputerTool(BaseAnthropicTool):
             x, y = self.scale_coordinates(ScalingSource.API, coordinate[0], coordinate[1])
 
             if action == "mouse_move":
+                cursor = SystemCursor()
+                cursor.move_to([x, y])
+                
                 return await self.shell(f"cliclick m:{x},{y}")
             elif action == "left_click_drag":
                 return await self.shell(f"cliclick dd:{x},{y}")
@@ -158,11 +166,22 @@ class ComputerTool(BaseAnthropicTool):
                             None, keyboard.press_and_release, '+'.join(mapped_keys)
                         )
                     else:
-                        # Handle single keys
-                        mapped_key = key_map.get(text, text)
-                        await asyncio.get_event_loop().run_in_executor(
+                        # Handle single keys#
+                        if text in key_map:
+                            mapped_key = key_map.get(text, text)
+                            await asyncio.get_event_loop().run_in_executor(
                             None, keyboard.press_and_release, mapped_key
-                        )
+                            )
+                            return ToolResult(output=f"Pressed key: {text}", error=None, base64_image=None)
+
+
+                        random_number = random.randint(150, 230)
+                        print("CPM: ", random_number)
+                        My_Typer = Human_typer(keyboard_layout = "qwertz", average_wpm = random_number)
+                        My_Typer.keyboard_type(mapped_key)
+                        #await asyncio.get_event_loop().run_in_executor(
+                        #    None, keyboard.press_and_release, mapped_key
+                        #)
 
                     return ToolResult(output=f"Pressed key: {text}", error=None, base64_image=None)
 
