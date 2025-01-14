@@ -2,6 +2,7 @@
 
 This is a fork of [mac_computer_use from Deedy](https://github.com/deedy/mac_computer_use)
 This Version has humanlike mouse movements added, as well as human like typing on textfields/input. Scrolling per scrollwheel will also be added. For all these additions, we are using other already existing Librarys, wich mimic the Human Input.
+This Version is beeing created as part of the Bachelor Thesis of [Sophia](https://github.com/sophes98) and [Me](https://github.com/ttuhin03). It is only for research Purposes and should not be used with malicious intent!
 
 Example Humanlike mouse movement: ![Alt text](mousemovements.png)
 
