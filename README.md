@@ -1,5 +1,11 @@
 # Anthropic Computer Use (for Mac)
 
+This is a fork of the computer-use-mac from ...
+This Version has humanlike mouse movements added, as well as human like typing on textfields/input. Scrolling per scrollwheel will also be added. For all these additions, we are using other already existing Librarys, wich mimic the Human Input.
+
+Example Humanlike mouse movement: ![Alt text](mousemovements.png)
+
+
 [Anthropic Computer Use](https://github.com/anthropics/anthropic-quickstarts/blob/main/computer-use-demo/README.md) is a beta Anthropic feature which runs a Docker image with Ubuntu and controls it. This fork allows you to run it natively on macOS, providing direct system control through native macOS commands and utilities.
 
 > [!CAUTION]
