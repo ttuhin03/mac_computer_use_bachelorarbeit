@@ -167,7 +167,7 @@ class ComputerTool(BaseAnthropicTool):
                         )
                     else:
                         # Handle single keys#
-                        if text in key_map:
+                        if text in key_map  or text =='Page_Down':
                             #raise Exception("Key not supported")
                             mapped_key = key_map.get(text, text)
                             await asyncio.get_event_loop().run_in_executor(
