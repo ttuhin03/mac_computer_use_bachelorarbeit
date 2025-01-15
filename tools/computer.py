@@ -212,7 +212,7 @@ class ComputerTool(BaseAnthropicTool):
                         #Handle normal Text entry Keys to enter like a Human
                         random_number = random.randint(150, 230)
                         print("CPM: ", random_number)
-                        My_Typer = Human_typer(keyboard_layout = "qwerty", average_wpm = 190)
+                        My_Typer = Human_typer(keyboard_layout = "qwerty", average_wpm = random_number)
                         My_Typer.keyboard_type(text)
 
                     return ToolResult(output=f"Pressed key: {text}", error=None, base64_image=None)
