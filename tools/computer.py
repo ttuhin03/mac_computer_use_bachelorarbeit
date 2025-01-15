@@ -9,6 +9,10 @@ from pathlib import Path
 from typing import Literal, TypedDict
 from uuid import uuid4
 
+from Quartz.CoreGraphics import CGEventCreateScrollWheelEvent, CGEventPost, kCGHIDEventTap
+from Quartz.CoreGraphics import kCGScrollEventUnitPixel
+import time
+
 import random
 
 from humancursor import SystemCursor
@@ -102,6 +106,22 @@ class ComputerTool(BaseAnthropicTool):
         assert self.width and self.height, "WIDTH, HEIGHT must be set"
         self.display_num = None  # macOS doesn't use X11 display numbers
 
+
+    def scroll_down(self,amount, steps=30, delay=0.02):
+        step_amount = amount // steps
+        for _ in range(steps):
+            event = CGEventCreateScrollWheelEvent(None, kCGScrollEventUnitPixel, 1, -step_amount)
+            CGEventPost(kCGHIDEventTap, event)
+            time.sleep(delay)
+
+    def scroll_up(self,amount, steps=30, delay=0.02):
+        step_amount = amount // steps
+        for _ in range(steps):
+            event = CGEventCreateScrollWheelEvent(None, kCGScrollEventUnitPixel, 1, step_amount)
+            CGEventPost(kCGHIDEventTap, event)
+            time.sleep(delay)
+    
+
     async def __call__(
         self,
         *,
@@ -166,8 +186,21 @@ class ComputerTool(BaseAnthropicTool):
                             None, keyboard.press_and_release, '+'.join(mapped_keys)
                         )
                     else:
-                        # Handle single keys#
-                        if text in key_map  or text =='Page_Down':
+                        #Handle Scrolling usinng the Scrollwheel
+                        print('----->', text)
+                        if text == 'Page_Down' or text =="Down":
+                            print('-----> Scrolling down')
+                            self.scroll_down(amount = 500)
+                            return ToolResult(output=f"Pressed key: {text}", error=None, base64_image=None)
+                        
+                        if text == 'Page_Up' or text =='Up':
+                            print('-----> Scrolling up')
+                            self.scroll_up(amount = 500)
+                            return ToolResult(output=f"Pressed key: {text}", error=None, base64_image=None)
+
+
+                        # Handle Special keys
+                        if text in key_map:
                             #raise Exception("Key not supported")
                             mapped_key = key_map.get(text, text)
                             await asyncio.get_event_loop().run_in_executor(
@@ -176,14 +209,11 @@ class ComputerTool(BaseAnthropicTool):
                             return ToolResult(output=f"Pressed key: {text}", error=None, base64_image=None)
                     
 
-
+                        #Handle normal Text entry Keys to enter like a Human
                         random_number = random.randint(150, 230)
                         print("CPM: ", random_number)
                         My_Typer = Human_typer(keyboard_layout = "qwerty", average_wpm = 190)
                         My_Typer.keyboard_type(text)
-                        #await asyncio.get_event_loop().run_in_executor(
-                        #    None, keyboard.press_and_release, mapped_key
-                        #)
 
                     return ToolResult(output=f"Pressed key: {text}", error=None, base64_image=None)
 
