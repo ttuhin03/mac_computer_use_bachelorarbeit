@@ -262,6 +262,7 @@ class ComputerTool(BaseAnthropicTool):
                     return result.replace(output=f"X={x},Y={y}")
                 return result
             else:
+                #Added to have better Leftclicks
                 if action == "left_click":
                     pyautogui.click()
                     return await self.shell(f"true")
